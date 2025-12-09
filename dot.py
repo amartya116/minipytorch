@@ -6,7 +6,27 @@ def dot(A, B):
         if len(A) != len(B):
             raise ValueError("Dimensions not equal for vector dot product")
         return sum(A[i] * B[i] for i in range(len(A)))
-
+    
+       # Case 1: scalar x list
+    # ----------------------------
+    if isinstance(A, (int, float)) and isinstance(B,list):
+        if(isinstance(B[0],list)):
+            for i in B:
+                for j in i:
+                    j=j*A
+        else:
+            for i in B:
+                i=i*A
+    if isinstance(B, (int, float)) and isinstance(A,list):
+        if(isinstance(A[0],list)):
+            for i in A:
+                for j in i:
+                    j=j*B
+        else:
+            for i in A:
+                i=i*B
+        
+            
     # ----------------------------
     # Case 2: 2D matrix multiplication
     # ----------------------------
