@@ -1,6 +1,6 @@
 temp=[]
 def flatten(A):
-    for i in range(len(A)):
+    for i in A:
         if(isinstance(i,list)):
             flatten(i)
         else:

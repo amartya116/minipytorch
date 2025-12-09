@@ -29,6 +29,7 @@ class Tensor:
     def reshape(x,y,self):
         return Tensor(reshape(x,y,self.data))
     
+    
     def flatten(self):
         return Tensor(flatten(self.data))
     
