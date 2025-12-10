@@ -1,8 +1,8 @@
-from vector_add import vector_add
-from dot import dot
-from transpose import transpose
-from reshape import reshape
-from flatten import flatten
+from linear_algebra_matrix_operations.vector_add import vector_add
+from linear_algebra_matrix_operations.dot import dot
+from linear_algebra_matrix_operations.transpose import transpose
+from linear_algebra_matrix_operations.reshape import reshape
+from linear_algebra_matrix_operations.flatten import flatten
 
 class Tensor:
     def __init__(self, data):
