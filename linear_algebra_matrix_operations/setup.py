@@ -3,6 +3,7 @@ from Cython.Build import cythonize
 import numpy as np
 
 setup(
-    ext_modules=cythonize("linear_algebra_matrix_operations\det.pyx", compiler_directives={"language_level": "3"}),
+    ext_modules=cythonize("linear_algebra_matrix_operations/reshape.pyx", compiler_directives={"language_level": "3"}),
     include_dirs=[np.get_include()],
 )
+v

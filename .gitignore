@@ -1,0 +1,33 @@
+# Build outputs
+build/
+*.exe
+*.lib
+*.exp
+*.pdb
+*.pyd
+__pycache__/
+*.pyc
+*.pyo
+
+# Python
+.venv/
+env/
+venv/
+Pipfile.lock
+poetry.lock
+
+# IDE/Editor
+.vscode/settings.json
+.vscode/launch.json  # Optional: commit if shared configs
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
