@@ -37,3 +37,13 @@ def matmul(A,B):
     result=np.linalg.matmul(a, b)
     return result
 
+def flatten(A):
+    a=np.array(A)
+    result=a.flatten()
+    return result
+
+def reshape(A,shape,order):
+    a=np.array(A)
+    result=np.reshape(A,shape,order)
+    return result
+
