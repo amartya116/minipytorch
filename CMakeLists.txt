@@ -11,7 +11,7 @@ set(PYBIND11_FINDPYTHON ON)
 find_package(pybind11 REQUIRED)
 
 # Add the pybind11 module
-pybind11_add_module(example linear_algebra_matrix_operations/vectoradd.cpp)
+pybind11_add_module(matrix_ops_simple linear_algebra_matrix_operations/matrixsimple.cpp)
 
 # Include directories if needed
-target_include_directories(example PRIVATE ${Python_INCLUDE_DIRS})
+target_include_directories(matrix_ops_simple PRIVATE ${Python_INCLUDE_DIRS})
