@@ -7,16 +7,61 @@
 namespace py = pybind11;
 using namespace std;
 
+//internal function not to be included in Tensor.py
+template <typename T>
+bool is2d(const T &v) {
+    if constexpr (std::is_same_v<typename T::value_type, typename T::value_type::value_type>) {
+        return true;
+    } else {
+        return false;
+    }
+}
+//internal function not to be included in Tensor.py
+bool isSquare(const vector<vector<double>>& A){
+    int rowsA=A.size();
+    bool issqaure=false;
+    for(int i=0;i<=rowsA;i++){
+        if(A[0].size()==rowsA){
+            issqaure=true;
+        }
+        else{
+            return false;
+        }
+    }
+    return true;
+}
+//internal function not to be included in Tensor.py
+bool checkshape(const vector<vector<double>>& A, const vector<vector<double>>& B){
+    int rowsA=A.size();
+    int columnsA=A[0].size();
+    int rowsB=B.size();
+    int columnsB=B[0].size();
+    if(rowsA==rowsB && columnsA==columnsB){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
 vector<vector<double>> add(const vector<vector<double>>& A, const vector<vector<double>>& B) {
     int rows=A.size();
     int columns=A[0].size();
-
     vector<vector<double>> C(rows, vector<double>(columns));
 
-    for(int i=0;i<rows;i++){
-        for(int j=0;j<columns;j++){
-            C[i][j]=A[i][j]+B[i][j];
+    try{
+        if(checkshape(A,B)){
+            for(int i=0;i<rows;i++){
+                for(int j=0;j<columns;j++){
+                    C[i][j]=A[i][j]+B[i][j];
+                }
+            }
         }
+        else{
+            throw;
+        }
+    }
+    catch(...){
+        cout<<"Unable to add please check argument shapes if they are same";
     }
     return C;
 }
@@ -26,11 +71,20 @@ vector<vector<double>> sub(const vector<vector<double>>& A, const vector<vector<
     int columns=A[0].size();
 
     vector<vector<double>> C(rows, vector<double>(columns));
-
-    for(int i=0;i<rows;i++){
-        for(int j=0;j<columns;j++){
-            C[i][j]=A[i][j]-B[i][j];
+    try{
+        if(checkshape(A,B)){
+            for(int i=0;i<rows;i++){
+                for(int j=0;j<columns;j++){
+                    C[i][j]=A[i][j]-B[i][j];
+                }
+            }
         }
+        else{
+            throw;
+        }
+    }
+    catch(...){
+        cout<<"Unable to subtract please check argument shapes if they are same";
     }
     return C;
 }
@@ -40,10 +94,20 @@ vector<vector<double>> mul(const vector<vector<double>>& A, const vector<vector<
 
     vector<vector<double>> C(rows, vector<double>(columns));
 
-    for(int i=0;i<rows;i++){
-        for(int j=0;j<columns;j++){
-            C[i][j]=A[i][j]*B[i][j];
+   try{
+        if(checkshape(A,B)){
+            for(int i=0;i<rows;i++){
+                for(int j=0;j<columns;j++){
+                    C[i][j]=A[i][j]*B[i][j];
+                }
+            }
         }
+        else{
+            throw;
+        }
+    }
+    catch(...){
+        cout<<"Unable to multiply please check argument shapes if they are same";
     }
     return C;
 }
@@ -53,10 +117,30 @@ vector<vector<double>> div(const vector<vector<double>>& A, const vector<vector<
 
     vector<vector<double>> C(rows, vector<double>(columns));
 
-    for(int i=0;i<rows;i++){
-        for(int j=0;j<columns;j++){
-            C[i][j]=A[i][j]/B[i][j];
+   try{
+        if(checkshape(A,B)){
+            for(int i=0;i<rows;i++){
+                for(int j=0;j<columns;j++){
+                    try{
+                        if(B[i][j]==0){
+                            C[i][j]=A[i][j]/B[i][j];
+                        }
+                        else{
+                            throw;
+                        }
+                    }
+                    catch(...){
+                        cout<<"Denominator cannot be zero";
+                    }
+                }
+            }
         }
+        else{
+            throw;
+        }
+    }
+    catch(...){
+        cout<<"Unable to divide please check argument shapes if they are same";
     }
     return C;
 }
@@ -81,7 +165,18 @@ vector<vector<double>> sqrt(const vector<vector<double>>& A) {
 
     for(int i=0;i<rows;i++){
         for(int j=0;j<columns;j++){
-            C[i][j]=sqrt(A[i][j]);
+            try{
+                if(C[i][j]>0){
+                    C[i][j]=sqrt(A[i][j]);
+                }
+                else{
+                    throw;
+                }
+            }
+            catch(...){
+                cout<<"Value cannot be imaginary";
+            }
+            
         }
     }
     return C;
@@ -104,10 +199,19 @@ vector<vector<double>> log(const vector<vector<double>>& A) {
     int columns=A[0].size();
 
     vector<vector<double>> C(rows, vector<double>(columns));
-
     for(int i=0;i<rows;i++){
         for(int j=0;j<columns;j++){
-            C[i][j]=log(A[i][j]);
+            try{
+                if(A[i][j]>0){
+                    C[i][j]=log(A[i][j]);
+                }
+                else{
+                    throw;
+                }
+        }
+           catch(...){
+            cout<<"value must be posítive or zero";
+           }
         }
     }
     return C;
@@ -324,5 +428,5 @@ PYBIND11_MODULE(matrix_ops_simple, m) {
     m.doc() = "pybind11 example plugin";
     m.def("add", &add, "A function that adds two numbers");
     m.def("sub", &sub, "A function that subs two numbers");
-    m.def("generateI",&generateI,"A function to generate araay");
+    m.def("generateI",&generateI,"A function to generate array");
 }
