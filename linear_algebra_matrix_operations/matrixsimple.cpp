@@ -111,7 +111,7 @@ vector<vector<double>> mul(const vector<vector<double>>& A, const vector<vector<
     }
     return C;
 }
-vector<vector<double>> div(const vector<vector<double>>& A, const vector<vector<double>>& B) {
+vector<vector<double>> div_matrix(const vector<vector<double>>& A, const vector<vector<double>>& B) {
     int rows=A.size();
     int columns=A[0].size();
 
@@ -157,7 +157,7 @@ vector<vector<double>> sqr(const vector<vector<double>>& A) {
     }
     return C;
 }
-vector<vector<double>> sqrt(const vector<vector<double>>& A) {
+vector<vector<double>> sqrt_matrix(const vector<vector<double>>& A) {
     int rows=A.size();
     int columns=A[0].size();
 
@@ -166,8 +166,8 @@ vector<vector<double>> sqrt(const vector<vector<double>>& A) {
     for(int i=0;i<rows;i++){
         for(int j=0;j<columns;j++){
             try{
-                if(C[i][j]>0){
-                    C[i][j]=sqrt(A[i][j]);
+                if(A[i][j]>0){
+                    C[i][j]=std::sqrt(A[i][j]);
                 }
                 else{
                     throw;
@@ -194,7 +194,7 @@ vector<vector<double>> exponent(const vector<vector<double>>& A) {
     }
     return C;
 }
-vector<vector<double>> log(const vector<vector<double>>& A) {
+vector<vector<double>> log_matrix(const vector<vector<double>>& A) {
     int rows=A.size();
     int columns=A[0].size();
 
@@ -426,7 +426,18 @@ vector<vector<int>> generateI(int size){
    
 PYBIND11_MODULE(matrix_ops_simple, m) {
     m.doc() = "pybind11 example plugin";
-    m.def("add", &add, "A function that adds two numbers");
-    m.def("sub", &sub, "A function that subs two numbers");
-    m.def("generateI",&generateI,"A function to generate array");
+    m.def("add", &add, "A function that adds two matrices");
+    m.def("sub", &sub, "A function that subtracts two matrices");
+    m.def("mul", &mul, "A function that multiplies two matrices element-wise");
+    m.def("div", &div_matrix, "A function that divides two matrices element-wise");
+    m.def("sqr", &sqr, "A function that squares each element of a matrix");
+    m.def("sqrt", &sqrt_matrix, "A function that takes square root of each element of a matrix");
+    m.def("exponent", &exponent, "A function that takes exponential of each element of a matrix");
+    m.def("log", &log_matrix, "A function that takes logarithm of each element of a matrix");
+    m.def("sum1", &sum1, "A function that sums elements along specified axis");
+    m.def("mul1", &mul1, "A function that multiplies elements along specified axis");
+    m.def("mean", &mean, "A function that computes mean along specified axis");
+    m.def("max", &max, "A function that finds maximum along specified axis");
+    m.def("min", &min, "A function that finds minimum along specified axis");
+    m.def("generateI",&generateI,"A function to generate identity matrix");
 }
