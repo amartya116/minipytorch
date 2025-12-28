@@ -5,7 +5,8 @@
       "includePath": [
         "${workspaceFolder}/**",
         "C:/Users/amart/AppData/Local/Programs/Python/Python314/include",
-        "C:/Users/amart/OneDrive/Desktop/projects/minipytorch/.venv/Lib/site-packages/pybind11/include"
+        "C:/Users/amart/OneDrive/Desktop/projects/minipytorch/.venv/Lib/site-packages/pybind11/include",
+        "C:/Users/amart/OneDrive/Desktop/projects/stats/include"
       ],
       "defines": ["_DEBUG", "UNICODE", "_UNICODE"],
       "compilerPath": "C:/path/to/gcc.exe",  // Adjust if needed

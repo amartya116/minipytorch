@@ -6,4 +6,4 @@ cmake -S .. -B . -Dpybind11_DIR="C:\Users\amart\AppData\Local\Programs\Python\Py
 cmake --build . --config Release
 cd ..
 copy build\Release\example.cp314-win_amd64.pyd example.pyd
-echo Build complete! Run with: python -c "import example; print(example.add(1,2))"
+echo Build complete! Run with: python -c 

@@ -96,7 +96,7 @@ vector<vector<double>> mul(const vector<vector<double>>& A, const vector<vector<
 
    try{
         if(checkshape(A,B)){
-            for(int i=0;i<rows;i++){
+            for(int i=0;i<rows;i++){ 
                 for(int j=0;j<columns;j++){
                     C[i][j]=A[i][j]*B[i][j];
                 }
