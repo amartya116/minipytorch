@@ -9,6 +9,10 @@ __pycache__/
 *.pyc
 *.pyo
 
+# Third-party dependencies (installed via vcpkg/package manager)
+vcpkg_installed/
+vcpkg/
+
 # Python
 .venv/
 env/
