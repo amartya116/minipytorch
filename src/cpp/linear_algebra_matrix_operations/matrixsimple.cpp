@@ -18,6 +18,8 @@ bool is2d(const T &v) {
 }
 //internal function not to be included in Tensor.py
 
+typedef std::vector<std::vector<double>> Matrix;
+
 bool isSquare(const vector<vector<double>>& A){
     int rowsA=A.size();
     bool issqaure=false;
@@ -47,7 +49,7 @@ bool checkshape(const vector<vector<double>>& A, const vector<vector<double>>& B
 vector<vector<double>> add(const vector<vector<double>>& A, const vector<vector<double>>& B) {
     int rows=A.size();
     int columns=A[0].size();
-    vector<vector<double>> C(rows, vector<hdouble>(columns));
+    vector<vector<double>> C(rows, vector<double>(columns));
 
     try{
         if(checkshape(A,B)){
@@ -426,14 +428,16 @@ vector<vector<int>> generateI(int size){
 }
 
 
+PYBIND11_MAKE_OPAQUE(Matrix);
+
 PYBIND11_MODULE(matrix_ops_simple, m) {
     m.doc() = "pybind11 example plugin";
     m.def("add", &add, "A function that adds two matrices");
     m.def("sub", &sub, "A function that subtracts two matrices");
     m.def("mul", &mul, "A function that multiplies two matrices element-wise");
     m.def("div", &div_matrix, "A function that divides two matrices element-wise");
-    m.def("sqr", &sqr, "A function that squares each element of a matrix");
-    m.def("sqrt", &sqrt_matrix, "A function that takes square root of each element of a matrix");
+    // m.def("sqr", py::cpp_function(&sqr), "A function that squares each element of a matrix");
+    // m.def("sqrt", py::cpp_function(&sqrt_matrix), "A function that takes square root of each element of a matrix");
     m.def("exponent", &exponent, "A function that takes exponential of each element of a matrix");
     m.def("log", &log_matrix, "A function that takes logarithm of each element of a matrix");
     m.def("sum1", &sum1, "A function that sums elements along specified axis");

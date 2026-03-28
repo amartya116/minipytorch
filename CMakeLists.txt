@@ -3,6 +3,8 @@ project(minipytorch)
 
 set(CMAKE_CXX_STANDARD 20)
 
+include_directories(src/cpp)
+
 # Enable SIMD and CPU optimizations
 if(MSVC)
     # Visual Studio compiler

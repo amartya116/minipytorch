@@ -8,7 +8,7 @@ using namespace std;
 
 // Static RNG (seeded once, thread-safe)
 static std::mt19937& get_rng() {
-    static std::mt19937 gen{std::random_device{}()};
+    static std::mt19937 gen{42};
     return gen;
 }
 
