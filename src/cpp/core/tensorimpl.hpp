@@ -1,4 +1,7 @@
-#include <stdio.h>
+#ifndef TENSORIMPL_HPP
+#define TENSORIMPL_HPP
+
+#include <cstddef>
 #include <memory>
 #include <vector>
 #include "storage.hpp"
@@ -47,8 +50,24 @@ struct TensorImpl
 	vector<int> getshape(){
 	    return shape;
 	}
-	vector<int> getstride(){
+	vector<int> getstrides(){
 	    return strides;
+	}
+	bool iscontiguous(){
+	    bool returnbool=false;
+	    if(strides.empty()) return false;
+	    if(strides.back()==1){
+	        returnbool=true;
+	        for(size_t i=0;i+1<strides.size();i++){
+	            if(strides[i] != strides[i+1]*shape[i+1]){
+	                returnbool=false;
+	                break;
+	            }
+	        }
+	    }
+	    return returnbool;
 	}
 };
 }
+
+#endif // TENSORIMPL_HPP

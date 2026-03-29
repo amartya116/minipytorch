@@ -1,8 +1,8 @@
 #include <iostream>
-#include "tensorimpl.hpp"
 #include <memory>
 #include <vector>
-using namespace std;
+#include "tensorimpl.hpp"
+
 namespace mylib::tensor
 {
 struct Tensor
