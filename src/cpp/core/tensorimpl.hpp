@@ -31,22 +31,6 @@ struct TensorImpl
 	    }
 	    return result;
 	}
-	bool iscontigous(){
-	    bool returnbool=false;
-	    if(strides[strides.size()-1]==1){
-	    for(int i=0;i<strides.size()-1;i++){
-	        if(strides[i]==strides[i+1]*shape[i+1]){
-	            returnbool=true;
-	        }
-	        else{
-	            return false;
-	        }
-	    }}
-	    else{
-	        return false;
-	    }
-	    return returnbool;
-	}
 	vector<int> getshape(){
 	    return shape;
 	}

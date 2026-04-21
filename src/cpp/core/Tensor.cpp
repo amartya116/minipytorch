@@ -10,7 +10,7 @@ struct Tensor
 	std::shared_ptr<TensorImpl> impl;
 	Tensor(shared_ptr<TensorImpl> impl) {
 		this->impl = impl;
-	}
+	} 
 	vector<int> shape() {
 		return impl->getshape();
 	}
