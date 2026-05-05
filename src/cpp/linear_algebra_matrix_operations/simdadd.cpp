@@ -3,18 +3,16 @@
 using namespace std;
 
 void simdadd(float* A,float* B,float* C,int N,int K){
-    int simdres=N*K-N*K/8;
-    for(int i=0;i<N*K;i=i+8){
-    __m256 simda=_mm256_loadu_ps(&A[i]);
-    __m256 simdb=_mm256_loadu_ps(&B[i]);
-    __m256 simdc=_mm256_add_ps(simda,simdb);
-    _mm256_storeu_ps(&C[i],simdc);
-
+    int total = N*K;
+    int i = 0;
+    for(; i + 7 < total; i += 8){
+    __m256 a = _mm256_loadu_ps(&A[i]);
+    __m256 b = _mm256_loadu_ps(&B[i]);
+    _mm256_storeu_ps(&C[i], _mm256_add_ps(a, b));
 }
-if(simdres!=0){
- for(int i=0;i<simdres;i++){
-    C[i]=A[i]+B[i];
- }}
+    for(; i < total; i++){
+    C[i] = A[i] + B[i];
+}
 }
 
 int main(){
