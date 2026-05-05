@@ -18,7 +18,7 @@ if(simdres!=0){
 }
 
 int main(){
-    int N = 3, K = 6;  // N*K = 18
+    int N = 1, K = 5;  // N*K = 5, less than 8
     float* A = new float[N*K];
     float* B = new float[N*K];
     float* C = new float[N*K];
