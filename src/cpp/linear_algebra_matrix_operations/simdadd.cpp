@@ -14,27 +14,3 @@ void simdadd(float* A,float* B,float* C,int N,int K){
     C[i] = A[i] + B[i];
 }
 }
-
-int main(){
-    int N = 1, K = 5;  // N*K = 5, less than 8
-    float* A = new float[N*K];
-    float* B = new float[N*K];
-    float* C = new float[N*K];
-
-    for(int i = 0; i < N*K; i++){
-        A[i] = (float)i;
-        B[i] = 1.0f;
-    }
-
-    simdadd(A, B, C, N,K);
-
-    for(int i = 0; i < N*K; i++){
-        cout << C[i] << " ";
-    }
-    cout << endl;
-
-    delete[] A;
-    delete[] B;
-    delete[] C;
-    return 0;
-}
