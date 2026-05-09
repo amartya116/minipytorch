@@ -2,8 +2,9 @@
 #include <vector>
 #include <string>
 #include <functional>
-
+#include "tensorimpl.hpp"
 using namespace std;
+std::shared_ptr<TensorImpl> impl;
 namespace mylib::autograd{
 struct Tensornode{
     float* data;

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <immintrin.h>
 #include "../masternode.hpp"
 #include "linear_algebra_matrix_operations/simdmatmul.hpp"
 
@@ -21,8 +22,13 @@ Tensornode* matmul(Tensornode *input1,Tensornode *input2) {
 	return result;
 }
 void mulbackward(Tensornode* NodeInput){
-    for(int i=0;i<NodeInput->size;i++){
-        NodeInput->parents[0]->grad[i]+=NodeInput->parents[1]->data[i]*NodeInput->grad[i];
-        NodeInput->parents[1]->grad[i]+=NodeInput->parents[0]->data[i]*NodeInput->grad[i];
+	int i=0;
+    for(;i<NodeInput->size-7;i=i+8){ 
+		_mm256_storeu_ps(NodeInput->parents[0]->grad+i,_mm256_add_ps(_mm256_loadu_ps(NodeInput->parents[0]->grad+i),_mm256_mul_ps(_mm256_loadu_ps(NodeInput->parents[1]->data+i),_mm256_loadu_ps(NodeInput->grad+i))));
+		_mm256_storeu_ps(NodeInput->parents[1]->grad+i,_mm256_add_ps(_mm256_loadu_ps(NodeInput->parents[1]->grad+i),_mm256_mul_ps(_mm256_loadu_ps(NodeInput->parents[0]->data+i),_mm256_loadu_ps(NodeInput->grad+i))));
     }
+	for(;i<NodeInput->size;i=i++){
+		NodeInput->parents[0]->grad[i]+=NodeInput->parents[1]->data[i]*NodeInput->grad[i];
+        NodeInput->parents[1]->grad[i]+=NodeInput->parents[0]->data[i]*NodeInput->grad[i];
+	}
 }

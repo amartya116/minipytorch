@@ -19,7 +19,12 @@ Tensornode* add(Tensornode *input1,Tensornode *input2) {
 	return result;
 }
 void addbackward(Tensornode* NodeInput){
-    for(int i=0;i<NodeInput->size;i++){
+	int i=0;
+	for(;i<NodeInput->size-7;i=i+8){
+        NodeInput->parents[0]->grad[i]+=NodeInput->grad[i];
+        NodeInput->parents[1]->grad[i]+=NodeInput->grad[i];
+    }
+    for(;i<NodeInput->size;i++){
         NodeInput->parents[0]->grad[i]+=NodeInput->grad[i];
         NodeInput->parents[1]->grad[i]+=NodeInput->grad[i];
     }
