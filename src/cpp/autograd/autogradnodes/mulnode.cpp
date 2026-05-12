@@ -2,23 +2,23 @@
 #include <vector>
 #include <string>
 #include <immintrin.h>
-#include "../masternode.hpp"
+#include "src\cpp\core\tensorimpl.hpp"
+#include "src\cpp\core\dtype.hpp"
 #include "linear_algebra_matrix_operations/simdmatmul.hpp"
-
+using namespace mylib::tensor;
+using namespace  mylib::core;
 using namespace std;
-using namespace mylib::autograd;
 
-Tensornode* matmul(Tensornode *input1,Tensornode *input2) {
-	Tensornode *result = new Tensornode();
-	int resultdatasize = input1->size;
-	result->size = resultdatasize;
-	result->shape = input1->shape;
-	result->data = new float[resultdatasize];
-	matmulsimdgemmcacheaware(input1->data, input2->data, result->data, input1->size, input2->size,result->size);
-	result->backwardfnname = "mulbackward";
-    result->backwardfunction=mulbackward;
-	result->parents.push_back(input1);
-	result->parents.push_back(input2);
+TensorImpl* matmul(TensorImpl *input1,TensorImpl *input2) {
+	int resultdatasize = input1->storage->nbytes;
+	int resultdatasize2 = input2->storage->nbytes;
+	auto resultStorage = make_shared<Storage>(resultdatasize, input1->storage->dtype, input1->storage->device);
+	auto resultGradStorage = make_shared<Storage>(resultdatasize, input1->storage->dtype, input1->storage->device);
+		// Cast void* to float* for SIMD operations
+	float* input1Data = static_cast<float*>(input1->storage->data);
+	float* input2Data = static_cast<float*>(input2->storage->data);
+	float* resultData = static_cast<float*>(resultStorage->data);
+	matmulsimdgemmcacheaware(input1Data,input2Data, resultData, resultdatasize,resultdatasize2,result->size);
 	return result;
 }
 void mulbackward(Tensornode* NodeInput){

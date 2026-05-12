@@ -4,6 +4,7 @@
 #include <functional>
 #include "tensorimpl.hpp"
 using namespace std;
+using namespace mylib::tensor;
 std::shared_ptr<TensorImpl> impl;
 namespace mylib::autograd{
 struct Tensornode{

@@ -1,31 +1,36 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "../masternode.hpp"
+#include "src\cpp\core\tensorimpl.hpp"
+#include "src\cpp\core\dtype.hpp"
+
 #include "linear_algebra_matrix_operations/simdadd.hpp"
 using namespace std;
-using namespace mylib::autograd;
-Tensornode* add(Tensornode *input1,Tensornode *input2) {
-	Tensornode *result = new Tensornode();
-	int resultdatasize = input1->size;
-	result->size = resultdatasize;
-	result->shape = input1->shape;
-	result->data = new float[resultdatasize];
-	simdadd(input1->data, input2->data, result->data, 1, resultdatasize);
-	result->backwardfnname = "addbackward";
-    result->backwardfunction=addbackward;
-	result->parents.push_back(input1);
-	result->parents.push_back(input2);
+using namespace mylib::tensor;
+using namespace  mylib::core;
+TensorImpl* add(TensorImpl *input1,TensorImpl *input2) {
+	int resultdatasize = input1->storage->nbytes;
+	auto resultStorage = make_shared<Storage>(resultdatasize, input1->storage->dtype, input1->storage->device);
+	auto resultGradStorage = make_shared<Storage>(resultdatasize, input1->storage->dtype, input1->storage->device);
+	
+	// Cast void* to float* for SIMD operations
+	float* input1Data = static_cast<float*>(input1->storage->data);
+	float* input2Data = static_cast<float*>(input2->storage->data);
+	float* resultData = static_cast<float*>(resultStorage->data);
+	
+	simdadd(input1Data, input2Data, resultData, 1, resultdatasize);
+	TensorImpl *result = new TensorImpl(resultStorage, resultGradStorage, input1->shape, input1->strides, 0, addbackward, "addbackward", 0, true, {input1, input2});
+	
 	return result;
 }
-void addbackward(Tensornode* NodeInput){
+void addbackward(TensorImpl* NodeInput){
 	int i=0;
-	for(;i<NodeInput->size-7;i=i+8){
-        NodeInput->parents[0]->grad[i]+=NodeInput->grad[i];
-        NodeInput->parents[1]->grad[i]+=NodeInput->grad[i];
-    }
-    for(;i<NodeInput->size;i++){
-        NodeInput->parents[0]->grad[i]+=NodeInput->grad[i];
-        NodeInput->parents[1]->grad[i]+=NodeInput->grad[i];
+	float* nodeGradData = static_cast<float*>(NodeInput->storageforgrad->data);
+	
+	for(;i<NodeInput->storage->nbytes;i=i++){
+        float* parent0GradData = static_cast<float*>(NodeInput->parents[0]->storageforgrad->data);
+        float* parent1GradData = static_cast<float*>(NodeInput->parents[1]->storageforgrad->data);
+        parent0GradData[i]+=nodeGradData[i];
+        parent1GradData[i]+=nodeGradData[i];
     }
 }

@@ -1,9 +1,10 @@
 #ifndef TENSORIMPL_HPP
 #define TENSORIMPL_HPP
-
+#include <string>
 #include <cstddef>
 #include <memory>
 #include <vector>
+#include <functional>
 #include "storage.hpp"
 
 namespace mylib::tensor
@@ -11,14 +12,29 @@ namespace mylib::tensor
 struct TensorImpl
 {
 	shared_ptr<Storage> storage;
+	shared_ptr<Storage> storageforgrad;
+	int level;
+	bool requiregrad;
+    vector<TensorImpl*> parents;
+	float singlevaluedata;
 	vector<int> shape;
 	vector<int> strides;
 	int offset;
+	string backwardfnname;
 	mylib::core::Dtypes dtype;
+	bool tooptmize;
+	function<void(TensorImpl*)> backwardfunction;
 	mylib::core::device device;
-	TensorImpl(shared_ptr<Storage> storage, vector<int> shape, vector<int> strides, int offset){
+	TensorImpl(shared_ptr<Storage> storage,
+		shared_ptr<Storage> storageforgrad, vector<int> shape, vector<int> strides, int offset, 
+		function<void(TensorImpl*)> backwardfunction,string backwardfnname,int level,bool requiregrad,vector<TensorImpl*> parents){
 	    this->storage=storage;
+		this->storageforgrad=storageforgrad;
 	    this->shape=shape;
+		this->level=level;
+		this->requiregrad=requiregrad;
+		this->backwardfunction=backwardfunction;
+		this->backwardfnname=backwardfnname;
 	    this->strides=strides;
 	    this->offset=offset;
 	    this->dtype=storage->dtype;
