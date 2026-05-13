@@ -26,11 +26,14 @@ TensorImpl* add(TensorImpl *input1,TensorImpl *input2) {
 void addbackward(TensorImpl* NodeInput){
 	int i=0;
 	float* nodeGradData = static_cast<float*>(NodeInput->storageforgrad->data);
-	
-	for(;i<NodeInput->storage->nbytes;i=i++){
-        float* parent0GradData = static_cast<float*>(NodeInput->parents[0]->storageforgrad->data);
-        float* parent1GradData = static_cast<float*>(NodeInput->parents[1]->storageforgrad->data);
-        parent0GradData[i]+=nodeGradData[i];
-        parent1GradData[i]+=nodeGradData[i];
+	float* parent0GradData = static_cast<float*>(NodeInput->parents[0]->storageforgrad->data);
+    float* parent1GradData = static_cast<float*>(NodeInput->parents[1]->storageforgrad->data);
+   for(;i<NodeInput->storage->nbytes-7;i=i+8){ 
+		_mm256_storeu_ps(parent0GradData+i,_mm256_add_ps(_mm256_loadu_ps(parent0GradData+i),_mm256_loadu_ps(nodeGradData+i)));
+		_mm256_storeu_ps(parent1GradData+i,_mm256_add_ps(_mm256_loadu_ps(parent1GradData+i),_mm256_loadu_ps(nodeGradData+i)));
     }
+	for(;i<NodeInput->storage->nbytes;i=i++){
+		parent0GradData[i]+=nodeGradData[i];
+        parent1GradData[i]+=nodeGradData[i];
+	}
 }
