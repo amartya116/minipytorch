@@ -4,7 +4,7 @@
 #include <immintrin.h>
 #include "src\cpp\core\tensorimpl.hpp"
 #include "src\cpp\core\dtype.hpp"
-#include "linear_algebra_matrix_operations/simdmatmul.hpp"
+#include "src\cpp\linear_algebra_matrix_operations\simdmatmul.hpp"
 using namespace mylib::tensor;
 using namespace mylib::core;
 using namespace std;

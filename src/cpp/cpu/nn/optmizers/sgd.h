@@ -1,5 +1,5 @@
 #pragma once
-#include "src\cpp\autograd\masternode.hpp"
-
-using namespace mylib::autograd;
-void optmizerSGD(float learningrate,Tensornode* thingtoptimizenode);
+#include "src\cpp\core\tensorimpl.hpp"
+using namespace std;
+using namespace mylib::tensor;
+void optmizerSGD(float learningrate,TensorImpl* thingtoptimizenode);
