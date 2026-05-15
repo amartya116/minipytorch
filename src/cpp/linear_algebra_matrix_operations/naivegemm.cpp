@@ -77,34 +77,3 @@ void gemmcacheaware(float* A, float* B, float* C,
 	}
 	delete[] B_T;
 }
-int main() {
-	int M = 4, N = 4, K = 4;
-	int mm = 4, nn = 4, kk = 2;
-
-	float A[16] = {
-		1,  2,  3,  4,
-		5,  6,  7,  8,
-		1,  0,  1,  0,
-		2,  1,  2,  1
-	};
-
-	float B[16] = {
-		1,  0,  1,  0,
-		0,  1,  0,  1,
-		1,  2,  3,  4,
-		2,  1,  2,  1
-	};
-
-	float C[16];
-
-	gemmcacheaware(A, B, C, M, K, N, mm, kk, nn);
-
-	for (int i = 0; i < M; i++) {
-		for (int j = 0; j < N; j++) {
-			cout << C[i * N + j] << " ";
-		}
-		cout << endl;
-	}
-
-	return 0;
-}
