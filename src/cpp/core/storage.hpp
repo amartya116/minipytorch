@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include "dtype.hpp"
 #include "device.hpp"

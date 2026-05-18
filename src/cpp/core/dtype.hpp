@@ -1,3 +1,4 @@
+#pragma once
 #include <stdio.h>
 #include <vector>
 #include <string>
@@ -57,6 +58,7 @@ string name(Dtypes Dtype){
 	case int64:
 		return "int64";
 	}
+    return "unknown";
  }
 
 Dtypes promote(Dtypes Dtype1,Dtypes Dtype2){

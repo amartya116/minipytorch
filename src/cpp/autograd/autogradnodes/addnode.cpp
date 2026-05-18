@@ -1,14 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "src\cpp\core\tensorimpl.hpp"
-#include "src\cpp\core\dtype.hpp"
+#include <immintrin.h>
+#include "../../core/tensorimpl.hpp"
+#include "../../core/dtype.hpp"
 
-#include "linear_algebra_matrix_operations/simdadd.hpp"
+#include "../../linear_algebra_matrix_operations/simdadd.hpp"
 using namespace std;
 using namespace mylib::tensor;
 using namespace  mylib::core;
-TensorImpl* add(TensorImpl *input1,TensorImpl *input2,enum Dtypes dtype) {
+void addbackward(TensorImpl* NodeInput);
+TensorImpl* add(TensorImpl *input1,TensorImpl *input2,Dtypes dtype) {
 	int resultdatasize = input1->storage->nbytes; 
 	auto resultStorage = make_shared<Storage>(resultdatasize, dtype, input1->storage->device);
 	auto resultGradStorage = make_shared<Storage>(resultdatasize, dtype, input1->storage->device);

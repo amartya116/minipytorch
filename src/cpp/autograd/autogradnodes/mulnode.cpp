@@ -2,14 +2,15 @@
 #include <vector>
 #include <string>
 #include <immintrin.h>
-#include "src\cpp\core\tensorimpl.hpp"
-#include "src\cpp\core\dtype.hpp"
-#include "src\cpp\linear_algebra_matrix_operations\simdmatmul.hpp"
+#include "../../core/tensorimpl.hpp"
+#include "../../core/dtype.hpp"
+#include "../../linear_algebra_matrix_operations/simdmatmul.hpp"
 using namespace mylib::tensor;
 using namespace mylib::core;
 using namespace std;
+void mulbackward(TensorImpl* NodeInput);
 
-TensorImpl* matmul(TensorImpl *input1, TensorImpl *input2,enum Dtypes dtype) {
+TensorImpl* matmul(TensorImpl *input1, TensorImpl *input2, Dtypes dtype) {
     int M = input1->shape[0];
     int K = input1->shape[1];
     int N = input2->shape[1];
