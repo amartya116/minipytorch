@@ -8,10 +8,10 @@
 using namespace std;
 using namespace mylib::tensor;
 using namespace  mylib::core;
-TensorImpl* add(TensorImpl *input1,TensorImpl *input2) {
-	int resultdatasize = input1->storage->nbytes;
-	auto resultStorage = make_shared<Storage>(resultdatasize, input1->storage->dtype, input1->storage->device);
-	auto resultGradStorage = make_shared<Storage>(resultdatasize, input1->storage->dtype, input1->storage->device);
+TensorImpl* add(TensorImpl *input1,TensorImpl *input2,enum Dtypes dtype) {
+	int resultdatasize = input1->storage->nbytes; 
+	auto resultStorage = make_shared<Storage>(resultdatasize, dtype, input1->storage->device);
+	auto resultGradStorage = make_shared<Storage>(resultdatasize, dtype, input1->storage->device);
 	
 	// Cast void* to float* for SIMD operations
 	float* input1Data = static_cast<float*>(input1->storage->data);
@@ -23,6 +23,7 @@ TensorImpl* add(TensorImpl *input1,TensorImpl *input2) {
 	
 	return result;
 }
+//add node Autodiff
 void addbackward(TensorImpl* NodeInput){
 	int i=0;
 	float* nodeGradData = static_cast<float*>(NodeInput->storageforgrad->data);

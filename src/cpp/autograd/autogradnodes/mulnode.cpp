@@ -9,7 +9,7 @@ using namespace mylib::tensor;
 using namespace mylib::core;
 using namespace std;
 
-TensorImpl* matmul(TensorImpl *input1, TensorImpl *input2) {
+TensorImpl* matmul(TensorImpl *input1, TensorImpl *input2,enum Dtypes dtype) {
     int M = input1->shape[0];
     int K = input1->shape[1];
     int N = input2->shape[1];
