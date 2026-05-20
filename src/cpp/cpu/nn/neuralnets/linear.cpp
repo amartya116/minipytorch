@@ -7,6 +7,8 @@
 #include "../../../core/dtype.hpp"
 #include "../../../autograd/autogradnodes/addnode.cpp"
 #include "../../../autograd/autogradnodes/mulnode.cpp"
+#include "../../../autograd/autogradnodes/lossfunctionnode.cpp"
+#include "../../../autograd/AutogradEngine.hpp"
 #include <immintrin.h>
 #include <string>
 #include <random>
@@ -67,7 +69,15 @@ TensorImpl* linear(int inputbatch, int output, Dtypes dtype, device deviceType, 
 int main() {
     int batch = 2;
     int output = 3;
+    float expected[6] = {
+    1.9f, 3.7f, 5.5f,
+    3.7f, 8.2f, 12.7f
+};
+
     TensorImpl* result = linear(batch, output, Dtypes::float32, device::CPU, 0);
+    TensorImpl* loss= lossfunctionnode(result,expected,Dtypes::float32);
+    backward(loss); 
+    optmizerengine(loss);
     int rows = result->shape[0];
     int cols = result->shape[1];
     float* resultData = static_cast<float*>(result->storage->data);

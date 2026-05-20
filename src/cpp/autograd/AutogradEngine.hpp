@@ -16,12 +16,6 @@ void build_topo(TensorImpl* node, vector<TensorImpl*>& topo, unordered_set<Tenso
 
     topo.push_back(node);
 }
-struct autogradgraph
-{
-    vector<float> accumaltedgrad;
-    function<void()> function1;
-    function<void()> function2;
-};
 void optmizerengine(TensorImpl* loss)
  {
 
