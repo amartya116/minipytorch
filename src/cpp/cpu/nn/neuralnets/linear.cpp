@@ -67,6 +67,7 @@ TensorImpl* linear(int inputbatch, int output, Dtypes dtype, device deviceType, 
 }
 
 int main() {
+    cout << "Starting main..." << endl;
     int batch = 2;
     int output = 3;
     float expected[6] = {
@@ -74,12 +75,17 @@ int main() {
     3.7f, 8.2f, 12.7f
 };
 
+    cout << "Calling linear()..." << endl;
     TensorImpl* result = linear(batch, output, Dtypes::float32, device::CPU, 0);
+    cout << "Linear done, calling lossfunctionnode()..." << endl;
     TensorImpl* loss= lossfunctionnode(result,expected,Dtypes::float32);
-    backward(loss); 
+    cout << "Loss done, calling backward()..." << endl;
+    backward(loss);
+    cout << "Backward done (skipped), calling optmizerengine()..." << endl;
     optmizerengine(loss);
+    cout << "Optimizer done, getting results..." << endl;
     int rows = result->shape[0];
-    int cols = result->shape[1];
+    int cols = result->shape[1]; 
     float* resultData = static_cast<float*>(result->storage->data);
 
     cout << "Result shape: [" << rows << ", " << cols << "]\n";

@@ -39,6 +39,7 @@ struct TensorImpl
 	    this->offset=offset;
 	    this->dtype=storage->dtype;
 	    this->device=storage->device;
+	    this->parents=parents;
 	}
 	int numel(){
 	    int result=1;

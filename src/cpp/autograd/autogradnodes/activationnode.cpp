@@ -1,7 +1,7 @@
 #include <iostream>
 #include <immintrin.h>
-#include "src\cpp\core\tensorimpl.hpp"
-#include "src\cpp\cpu\nn\activation\relu.h"
+#include "../../../core/tensorimpl.hpp"
+#include "../../../cpu/nn/activation/relu.h"
 using namespace std;
 using namespace mylib::tensor;
 TensorImpl* activationnode(TensorImpl* input1,enum Dtypes dtype)

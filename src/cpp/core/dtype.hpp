@@ -13,7 +13,7 @@ enum Dtypes {
 	float32=5,
 	float64=6
 };
-int itemsize(Dtypes Dtype) {
+inline int itemsize(Dtypes Dtype) {
     int sizeneeded;
 	switch (Dtype) {
 	case float32:
@@ -41,7 +41,7 @@ int itemsize(Dtypes Dtype) {
 	return sizeneeded;
 
 }
-string name(Dtypes Dtype){
+inline string name(Dtypes Dtype){
     switch (Dtype) {
 	case float32:
 		return "float32";
@@ -61,7 +61,7 @@ string name(Dtypes Dtype){
     return "unknown";
  }
 
-Dtypes promote(Dtypes Dtype1,Dtypes Dtype2){
+inline Dtypes promote(Dtypes Dtype1,Dtypes Dtype2){
     if(Dtype1>Dtype2){
         return Dtype1;
     }
