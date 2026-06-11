@@ -59,8 +59,8 @@ TensorImpl* linear(int inputbatch, int output, Dtypes dtype, device deviceType, 
 
     auto noBackward = [](TensorImpl*) {};
     TensorImpl *inputnode = new TensorImpl(inputnodesizeStorage, inputnodesizeGradStorage, {inputbatch, output}, {output, 1}, 0, noBackward, "null", level, false, {});
-    TensorImpl *weightnode = new TensorImpl(weightnodeStorage, weightnodedGradStorage, {output, output}, {output, 1}, 0, noBackward, "null", 0, false, {});
-    TensorImpl *biasaddnode = new TensorImpl(biasaddStorage, biasaddGradStorage, {inputbatch, output}, {output, 1}, 0, noBackward, "null", 0, false, {});
+    TensorImpl *weightnode = new TensorImpl(weightnodeStorage, weightnodedGradStorage, {output, output}, {output, 1}, 0, noBackward, "null", 0, true, {});
+    TensorImpl *biasaddnode = new TensorImpl(biasaddStorage, biasaddGradStorage, {inputbatch, output}, {output, 1}, 0, noBackward, "null", 0, true, {});
     TensorImpl *weightmulintermideatenode = matmul(inputnode, weightnode, dtype);
     TensorImpl *linearnode = add(weightmulintermideatenode, biasaddnode, dtype);
     return linearnode;
