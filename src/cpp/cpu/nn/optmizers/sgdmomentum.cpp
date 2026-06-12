@@ -17,6 +17,7 @@ void optmizerSGDmomentum(float learningrate,float beta,TensorImpl* thingtoptimiz
         __m256 A=_mm256_loadu_ps(nodeData + i);
         __m256 B=_mm256_loadu_ps(nodeGradData + i);
         __m256 velocitynew=_mm256_add_ps(_mm256_mul_ps(betavector,velocitysimd),_mm256_mul_ps(learningratevector,B));
+        _mm256_storeu_ps(velocity + i, velocitynew);
         __m256 newupdatedweight=_mm256_sub_ps(A,velocitynew);
         _mm256_storeu_ps(nodeData + i, newupdatedweight);
     }
