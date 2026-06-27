@@ -39,7 +39,7 @@ public:
         int i = 0;
         __m256 decay_simd = _mm256_set1_ps(decayrate);
         __m256 one_minus_decay_simd = _mm256_set1_ps(1.0f - decayrate);
-         __m256 lr_simd = _mm256_set1_ps(learningrate);
+        __m256 lr_simd = _mm256_set1_ps(learningrate);
         __m256 eps_simd = _mm256_set1_ps(1e-8f);
 
         for (; i + 8 <= nbytes_as_floats; i += 8) {
