@@ -443,7 +443,7 @@ PYBIND11_MODULE(matrix_ops_simple, m) {
     m.def("sum1", &sum1, "A function that sums elements along specified axis");
     m.def("mul1", &mul1, "A function that multiplies elements along specified axis");
     m.def("mean", &mean, "A function that computes mean along specified axis");
-    m.def("max", &max, "A function that finds maximum along specified axis");
-    m.def("min", &min, "A function that finds minimum along specified axis");
+    m.def("max", (vector<double>(*)(vector<vector<double>>, int))&max, "A function that finds maximum along specified axis");
+    m.def("min", (vector<double>(*)(vector<vector<double>>, int))&min, "A function that finds minimum along specified axis");
     m.def("generateI",&generateI,"A function to generate identity matrix");
 }

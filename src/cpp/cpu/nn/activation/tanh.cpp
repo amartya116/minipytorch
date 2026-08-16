@@ -17,3 +17,4 @@ void tanh(float* x,int lengthN,float* activatedoutput){
         activatedoutput[i]=exp(x[i])-exp(1/x[i])/exp(x[i])+exp(1/x[i]);
     }
 }
+ 
