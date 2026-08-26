@@ -27,7 +27,7 @@ struct TensorImpl
 	mylib::core::device device;
 	TensorImpl(shared_ptr<Storage> storage,
 		shared_ptr<Storage> storageforgrad, vector<int> shape, vector<int> strides, int offset, 
-		function<void(TensorImpl*)> backwardfunction,string backwardfnname,int level,bool requiregrad,vector<TensorImpl*> parents){
+		function<void(TensorImpl*)> backwardfunction,string backwardfnname,int level,bool requiregrad,vector<TensorImpl*> parents,bool tooptmize){
 	    this->storage=storage;
 		this->storageforgrad=storageforgrad;
 	    this->shape=shape;
@@ -36,6 +36,7 @@ struct TensorImpl
 		this->backwardfunction=backwardfunction;
 		this->backwardfnname=backwardfnname;
 	    this->strides=strides;
+		this->tooptmize=tooptmize;
 	    this->offset=offset;
 	    this->dtype=storage->dtype;
 	    this->device=storage->device;

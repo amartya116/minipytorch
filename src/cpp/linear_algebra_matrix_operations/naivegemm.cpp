@@ -9,7 +9,6 @@ void transpose(float* input,int K,int N,float* B_T) {
 		}
 	}
 }
-
 void gemmcacheaware(float* A, float* B, float* C,
                     int M, int K, int N,
                     int mm, int kk, int nn) {

@@ -9,11 +9,11 @@ using namespace mylib::tensor;
 void MSElossfunctionnodebackward(TensorImpl* NodeInput, float* target);
 TensorImpl* lossfunctionnode(TensorImpl* input1, float* target,enum Dtypes dtype)
 {
-    int resultdatasize = input1->storage->nbytes;
+    int resultdatasize = input1->storage->nbytes/sizeof(float);
     auto resultStorage = make_shared<Storage>(resultdatasize, input1->storage->dtype, input1->storage->device);
     auto resultGradStorage = make_shared<Storage>(resultdatasize, input1->storage->dtype, input1->storage->device);
     TensorImpl *lossnodeMSE = new TensorImpl(resultStorage, resultGradStorage, input1->shape, input1->strides, 0,
-        [target](TensorImpl* NodeInput){ MSElossfunctionnodebackward(NodeInput, target); }, "MSElossfunctionnodebackward", 0, true, {input1});
+        [target](TensorImpl* NodeInput){ MSElossfunctionnodebackward(NodeInput, target); }, "MSElossfunctionnodebackward", 0, true, {input1},false);
     float* input1Data = static_cast<float*>(input1->storage->data);
     float* resultData = static_cast<float*>(lossnodeMSE->storage->data);
     mseloss(input1Data, target, resultdatasize);

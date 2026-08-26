@@ -9,7 +9,7 @@ void optmizerSGDmomentum(float learningrate,float beta,TensorImpl* thingtoptimiz
     float* nodeData = static_cast<float*>(thingtoptimizenode->storage->data);
     float* nodeGradData = static_cast<float*>(thingtoptimizenode->storageforgrad->data);
     int nbytes_as_floats = thingtoptimizenode->storage->nbytes / sizeof(float);
-    float* velocity = new float[nbytes_as_floats]{}; 
+    float* velocity =  new float[nbytes_as_floats]{};
     __m256 velocitysimd=_mm256_setzero_ps();
     __m256 betavector=_mm256_set1_ps(beta);
     __m256 learningratevector=_mm256_set1_ps(learningrate);

@@ -26,7 +26,7 @@ TensorImpl* matmul(TensorImpl *input1, TensorImpl *input2, Dtypes dtype) {
 
     matmulsimdgemmcacheaware(input1Data, input2Data, resultData, M, K, N);
 
-    TensorImpl* result = new TensorImpl(resultStorage, resultGradStorage, {M, N}, {N, 1}, 0, mulbackward, "mulbackward", 0, true, {input1, input2});
+    TensorImpl* result = new TensorImpl(resultStorage, resultGradStorage, {M, N}, {N, 1}, 0, mulbackward, "mulbackward", 0, true, {input1, input2},false);
     return result;
 }
 
