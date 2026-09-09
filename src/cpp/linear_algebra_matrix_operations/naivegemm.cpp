@@ -1,78 +1,65 @@
 #include <iostream>
 #include <vector>
+#include <immintrin.h>
 
 using namespace std;
-void transpose(float* input,int K,int N,float* B_T) {
-	for(int i=0; i<N; i++) {
-		for(int j=0; j<K; j++) {
-			B_T[j*N + i] = input[i*K + j];
+//architcture -> 
+//tile-> pack -> microkernal simd
+//C is m x n 
+//A is m x k
+//B is k x n
+void microkernal_6x16(float *A,float *B,float *C,int n,int k){
+	__m256 c00=_mm256_setzero_ps();
+	__m256 c01=_mm256_setzero_ps();
+	__m256 c02=_mm256_setzero_ps();
+	__m256 c03=_mm256_setzero_ps();
+	__m256 c04=_mm256_setzero_ps();
+	__m256 c05=_mm256_setzero_ps();
+	__m256 c06=_mm256_setzero_ps();
+	__m256 c07=_mm256_setzero_ps();
+	__m256 c08=_mm256_setzero_ps();
+	__m256 c09=_mm256_setzero_ps();
+	__m256 c10=_mm256_setzero_ps();
+	__m256 c11=_mm256_setzero_ps();
+	for(int iteratorK=0;iteratorK<k;iteratorK++){
+		__m256 a00=_mm256_loadu_ps(&B[iteratorK*n]);
+		__m256 a01=_mm256_loadu_ps(&B[iteratorK*n+8]);
+		__m256 b00=_mm256_set1_ps(A[0*k+iteratorK]);
+		__m256 b01=_mm256_set1_ps(A[1*k+iteratorK]);
+		c00=_mm256_fmadd_ps(a00,b00,c00);
+		c01=_mm256_fmadd_ps(a01,b00,c01);
+		c02=_mm256_fmadd_ps(a00,b01,c02);
+		c03=_mm256_fmadd_ps(a01,b01,c03);
+		__m256 b02=_mm256_set1_ps(A[2*k+iteratorK]);
+		__m256 b03=_mm256_set1_ps(A[3*k+iteratorK]);
+		c04=_mm256_fmadd_ps(a00,b02,c04);
+		c05=_mm256_fmadd_ps(a01,b02,c05);
+		c06=_mm256_fmadd_ps(a00,b03,c06);
+		c07=_mm256_fmadd_ps(a01,b03,c07);
+		__m256 b04=_mm256_set1_ps(A[4*k+iteratorK]);
+		__m256 b05=_mm256_set1_ps(A[5*k+iteratorK]);
+		c08=_mm256_fmadd_ps(a00,b04,c08);
+		c09=_mm256_fmadd_ps(a01,b04,c09);
+		c10=_mm256_fmadd_ps(a00,b05,c10);
+		c11=_mm256_fmadd_ps(a01,b05,c11);
 		}
+		_mm256_storeu_ps(&C[0*n + 0], c00);   
+		_mm256_storeu_ps(&C[0*n + 8], c01);   // row 0
+		_mm256_storeu_ps(&C[1*n + 0], c02);  
+		_mm256_storeu_ps(&C[1*n + 8], c03);   // row 1
+		_mm256_storeu_ps(&C[2*n + 0], c04);  
+		_mm256_storeu_ps(&C[2*n + 8], c05);   // row 2
+		_mm256_storeu_ps(&C[3*n + 0], c06);  
+		_mm256_storeu_ps(&C[3*n + 8], c07);   // row 3
+		_mm256_storeu_ps(&C[4*n + 0], c08);  
+		_mm256_storeu_ps(&C[4*n + 8], c09);   // row 4
+		_mm256_storeu_ps(&C[5*n + 0], c10);  
+		_mm256_storeu_ps(&C[5*n + 8], c11);   // row 5
+
 	}
-}
-void gemmcacheaware(float* A, float* B, float* C,
-                    int M, int K, int N,
-                    int mm, int kk, int nn) {
+	
+	
 
-	std::fill(C, C + M * N, 0.0f);
-	float* B_T = new float[K*N];
-	transpose(B, K, N, B_T);
-	for (int tilem = 0; tilem < M; tilem += mm) {
-		for (int tilen = 0; tilen < N; tilen += nn) {
-			float c00=0,c01=0,c02=0,c03=0,c10=0,c11=0,c12=0,c13=0,c20=0,c21=0,c22=0,c23=0,c30=0,c31=0,c32=0,c33=0;
-			for (int tilek = 0; tilek < K; tilek += kk) {
-				int M_end = std::min(tilem + mm, M);
-				int K_end = std::min(tilek + kk, K);
-				int N_end = std::min(tilen + nn, N);
-				for (int i = tilem; i < M_end; i=i+4) {
-					for (int j = tilen; j < N_end; j=j+4) {
-						for (int k = tilek; k < K_end; k++) {
-							float a0=A[i*K+k];
-							float a1=A[(i+1)*K+k];
-							float a2=A[(i+2)*K+k];
-							float a3=A[(i+3)*K+k];
-							float b0=B_T[j*K+k];
-							float b1=B_T[(j+1)*K+k];
-							float b2=B_T[(j+2)*K+k];
-							float b3=B_T[(j+3)*K+k];
-							c00 += a0 * b0;
-							c01 += a0 * b1;
-							c02 += a0 * b2;
-							c03 += a0 * b3;
-							c10 += a1 * b0;
-							c11 += a1 * b1;
-							c12 += a1 * b2;
-							c13 += a1 * b3;
-							c20 += a2 * b0;
-							c21 += a2 * b1;
-							c22 += a2 * b2;
-							c23 += a2 * b3;
-							c30 += a3 * b0;
-							c31 += a3 * b1;
-							c32 += a3 * b2;
-							c33 += a3 * b3;
-
-						}
-						C[i*N+j]   = c00;
-						C[i*N+j+1] = c01;
-						C[i*N+j+2] = c02;
-						C[i*N+j+3] = c03;
-						C[(i+1)*N+j] = c10;
-						C[(i+1)*N+j+1] = c11;
-						C[(i+1)*N+j+2] = c12;
-						C[(i+1)*N+j+3] = c13;
-						C[(i+2)*N+j] = c20;
-						C[(i+2)*N+j+1] = c21;
-						C[(i+2)*N+j+2] = c22;
-						C[(i+2)*N+j+3] = c23;
-						C[(i+3)*N+j] = c30;
-						C[(i+3)*N+j+1] = c31;
-						C[(i+3)*N+j+2] = c32;
-						C[(i+3)*N+j+3] = c33;
-					}
-
-				}
-			}
-		}
-	}
-	delete[] B_T;
+void cacheblocking(){
+	 
 }

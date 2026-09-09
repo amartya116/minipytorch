@@ -4,12 +4,32 @@
 #include "../../../core/tensorimpl.hpp"
 using namespace std;
 using namespace mylib::tensor;
-void optmizerSGDnestorov(float learningrate,float beta,TensorImpl* thingtoptimizenode,int epoch){
-    int i=0;
+class optmierSGDmomentum{
+    public:
+        struct State{
+            float* nodeDataState = nullptr;
+            bool isInitialized = false;
+        };
+        unordered_map<TensorImpl*,State> optimizer_states;
+
+        ~optmierSGDmomentum()
+        {
+            for (auto& pair : optimizer_states) {
+            if (pair.second.nodeDataState) {
+                delete[] pair.second.nodeDataState;
+            }
+        }
+        }
+void step(float learningrate,float beta,TensorImpl* thingtoptimizenode){
+    auto& s = optimizer_states[thingtoptimizenode]; 
     float* nodeData = static_cast<float*>(thingtoptimizenode->storage->data);
     float* nodeGradData = static_cast<float*>(thingtoptimizenode->storageforgrad->data);
     float* velocity = static_cast<float*>(thingtoptimizenode->storage->data);
     int nbytes_as_floats = thingtoptimizenode->storage->nbytes / sizeof(float);
+      if (!s.isInitialized) {
+            s.nodeDataState = new float[nbytes_as_floats]{};
+            s.isInitialized = true;
+        }
     __m256 betavector=_mm256_set1_ps(beta);
     __m256 learningratevector=_mm256_set1_ps(learningrate);
         for(;i<nbytes_as_floats-7;i+=8){
@@ -25,4 +45,4 @@ void optmizerSGDnestorov(float learningrate,float beta,TensorImpl* thingtoptimiz
         velocity[i]=beta*velocity[i]+learningrate*nodeGradData[i];
         nodeData[i]=nodeData[i]-(beta*velocity[i]+learningrate*nodeGradData[i]);
     }
-}
+}};
