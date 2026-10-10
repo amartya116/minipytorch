@@ -44,3 +44,7 @@ target_include_directories(matrix_ops_simple PRIVATE ${Python_INCLUDE_DIRS})
 add_executable(matrix_benchmark src/cpp/benchmarks/matrix_benchmark.cpp)
 target_link_libraries(matrix_benchmark PRIVATE benchmark::benchmark)
 target_include_directories(matrix_benchmark PRIVATE src/cpp)
+
+add_executable(gemm_benchmark src/cpp/benchmarks/gemm_benchmark.cpp)
+target_link_libraries(gemm_benchmark PRIVATE benchmark::benchmark)
+target_include_directories(gemm_benchmark PRIVATE src/cpp)
