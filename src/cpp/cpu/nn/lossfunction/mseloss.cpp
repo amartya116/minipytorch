@@ -3,9 +3,9 @@
 #include <immintrin.h>
 using namespace std;
 
-float mseloss(float* pred,float* actual,int size){
+float* mseloss(float* pred,float* actual,int size){
     int i=0;
-    float loss=0;
+    float* loss=0;
     float temp[8];
 
     for(;i+ 7<size;i=i+8){

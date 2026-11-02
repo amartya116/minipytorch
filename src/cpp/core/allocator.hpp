@@ -3,6 +3,8 @@
 #include <map>
 #include <cstdlib>
 #include <vector>
+#include <mutex>
+#include "global.hpp"
 namespace mylib::core
 {
     struct CPUAllocator {
@@ -14,7 +16,7 @@ namespace mylib::core
             return block; 
         }
         else{
-            return malloc(bytes);
+            return calloc(bytes,sizeof(float));
         }
     }
     void free(void* ptr,size_t bytes){

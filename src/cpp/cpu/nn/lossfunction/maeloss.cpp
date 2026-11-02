@@ -1,11 +1,11 @@
-#include <iostream.h>
+#include <iostream>
 #include <immintrin.h>
 #include <cmath>
 using namespace std;
 
 float MAEloss(float* inputfromlastnode,float* actual,int size){
     int i=0;
-    float loss;
+    float loss=0.0f;
     for(;i<size-7;i=i+8){
         float temp[8];
         __m256 inputa=_mm256_loadu_ps(&inputfromlastnode[i]);
