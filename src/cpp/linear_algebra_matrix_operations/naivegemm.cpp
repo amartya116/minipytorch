@@ -115,6 +115,7 @@ void gemmmatmul(int N,int M,int K,float *inputA,float* inputB,float* C){
 }
 
 // standalone test: compile with -DNAIVEGEMM_MAIN (off by default so gemm_benchmark.cpp can include this file)
+#ifdef NAIVEGEMM_MAIN
 #include <chrono>
 #include <cmath>
 #include <cstdio>
@@ -159,3 +160,4 @@ int main() {
 
     return 0;
 }
+#endif

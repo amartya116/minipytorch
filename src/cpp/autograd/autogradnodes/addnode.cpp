@@ -22,6 +22,7 @@ TensorImpl* add(TensorImpl *input1,TensorImpl *input2,Dtypes dtype) {
 	
 	simdadd(input1Data, input2Data, resultData, 1, resultdatasize/sizeof(float));
 	TensorImpl *result = new TensorImpl(resultStorage, resultGradStorage, input1->shape, input1->strides, 0, addbackward, "addbackward", 0, true, {input1, input2}, false);
+	tape.push_back(result);
 	
 	return result;
 }
@@ -43,7 +44,9 @@ TensorImpl* addbias(TensorImpl *input, TensorImpl *bias, Dtypes dtype) {
 			resultData[r * cols + c] = inputData[r * cols + c] + biasData[c];
 		}
 	}
-	return new TensorImpl(resultStorage, resultGradStorage, input->shape, input->strides, 0, addbiasbackward, "addbiasbackward", 0, true, {input, bias}, false);
+	TensorImpl *result = new TensorImpl(resultStorage, resultGradStorage, input->shape, input->strides, 0, addbiasbackward, "addbiasbackward", 0, true, {input, bias}, false);
+	tape.push_back(result);
+	return result;
 }
 void addbiasbackward(TensorImpl* NodeInput) {
 	int rows = NodeInput->shape[0];

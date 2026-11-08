@@ -4,6 +4,7 @@
 #include "../../../cpu/nn/activation/relu.h"
 using namespace std;
 using namespace mylib::tensor;
+void Relubackward(TensorImpl* NodeInput);
 TensorImpl* activationnode(TensorImpl* input1,enum mylib::core::Dtypes dtype)
 {
     int resultdatasize = input1->storage->nbytes;
@@ -14,6 +15,7 @@ TensorImpl* activationnode(TensorImpl* input1,enum mylib::core::Dtypes dtype)
 	
     relu(inputdata,resultData,resultdatasize/sizeof(float));
     TensorImpl *activationnoderelu = new TensorImpl(resultStorage, resultGradStorage, input1->shape, input1->strides, 0, Relubackward, "Relubackward", 0, true, {input1},false);
+    tape.push_back(activationnoderelu);
     return activationnoderelu;
 }
 //RELU node Autodiff

@@ -11,7 +11,8 @@ struct Storage
 	size_t  nbytes;
 	mylib::core::Dtypes dtype;
 	mylib::core::device device;
-	mylib::core::CPUAllocator allocator;
+	// one shared pool for every Storage, a per-Storage pool died with the Storage and never freed anything
+	static inline mylib::core::CPUAllocator allocator;
 
 	Storage(size_t nbytes,mylib::core::Dtypes dtype,mylib::core::device device)
 	{

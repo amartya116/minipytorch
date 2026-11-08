@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include <cstdlib>
+#include <cstring>
 #include <vector>
 #include <mutex>
 #include "global.hpp"
@@ -13,7 +14,8 @@ namespace mylib::core
         if(!pool[bytes].empty()){
             void* block = pool[bytes].back();   // get last element
             pool[bytes].pop_back();             // remove it
-            return block; 
+            memset(block,0,bytes);              // pooled block is dirty, grads must start at zero
+            return block;
         }
         else{
             return calloc(bytes,sizeof(float));

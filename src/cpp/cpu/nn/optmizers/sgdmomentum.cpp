@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 #include <immintrin.h>
 #include "../../../core/tensorimpl.hpp"
 #include "../../../core/factory.cpp"
@@ -30,16 +31,15 @@ class optmierSGDmomentum{
         if (!s.isInitialized) {
             s.nodeDataState = new float[nbytes_as_floats]{};
             s.isInitialized = true;
-        } 
-        int nbytes_as_floats = thingtoptimizenode->storage->nbytes / sizeof(float);
-        __m256 velocitysimd = _mm256_loadu_ps(&s.nodeDataState[i]);
+        }
         __m256 betavector=_mm256_set1_ps(beta);
         __m256 learningratevector=_mm256_set1_ps(learningrate);
         for(;i<nbytes_as_floats-7;i+=8){
+            __m256 velocitysimd = _mm256_loadu_ps(s.nodeDataState + i);
             __m256 A=_mm256_loadu_ps(nodeData + i);
             __m256 B=_mm256_loadu_ps(nodeGradData + i);
             __m256 velocitynew=_mm256_add_ps(_mm256_mul_ps(betavector,velocitysimd),_mm256_mul_ps(learningratevector,B));
-            _mm256_storeu_ps(&nodeData[i],velocitynew);
+            _mm256_storeu_ps(s.nodeDataState + i,velocitynew);
             __m256 newupdatedweight=_mm256_sub_ps(A,velocitynew);
             _mm256_storeu_ps(nodeData + i, newupdatedweight);
     }

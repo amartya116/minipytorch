@@ -79,6 +79,7 @@ int main() {
     cout << "Linear done, calling lossfunctionnode()..." << endl;
     TensorImpl* loss= lossfunctionnode(result,expected,Dtypes::float32);
     cout << "Loss done, calling backward()..." << endl;
+    zerograd(loss);
     backward(loss);
     cout << "Backward done (skipped), calling optmizerengine()..." << endl;
     optmizerengine(loss);
@@ -97,5 +98,6 @@ int main() {
             cout << " ";
         }
     }
+    freetape();   // intermediates only, leaves stay
     return 0;
 }

@@ -70,6 +70,15 @@ struct TensorImpl
 	    return returnbool;
 	}
 };
+// per-step tape: every intermediate node an op makes is pushed here, freed after the optimizer step
+// leaves (weights, inputs, bias) are never pushed, they live across steps
+inline vector<TensorImpl*> tape;
+inline void freetape(){
+    for(int i=0;i<tape.size();i++){
+        delete tape[i];
+    }
+    tape.clear();
+}
 }
 
 #endif // TENSORIMPL_HPP

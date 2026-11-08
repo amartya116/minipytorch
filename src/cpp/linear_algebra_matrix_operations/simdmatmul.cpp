@@ -15,8 +15,8 @@ void matmulsimdgemmcacheaware(float* A, float* B, float* C,
 
     
 	std::fill(C, C + M * N, 0.0f);
-	float* B_T = new float[K*N];
-	transpose(B, K, N, B_T);
+	vector<float> B_T(K*N);
+	transpose(B, K, N, B_T.data());
 	for (int i = 0; i < M; i++) {
 		for (int j = 0; j < N; j++) {
             __m256 c0=_mm256_setzero_ps();
